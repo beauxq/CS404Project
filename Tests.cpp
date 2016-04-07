@@ -26,11 +26,11 @@ void Tests::test_grid_class()
     if (grid.str() != "0 0")
         std::cout << "FAIL: bad file read_from_file and str\n";
 
-    std::cout << "\ninput file 1:\n";
+    std::cout << "\nread_from_file: input file 1\n";
     grid.read_from_file("resources/CS404SP16RewardMatrixInput1.txt");
     std::cout << grid.str() << std::endl;
 
-    std::cout << "\ninput file 2:\n";
-    grid.read_from_file("resources/CS404SP16RewardMatrixInput2.txt");
-    std::cout << grid.str() << std::endl;
+    std::cout << "\nfilename constructor: input file 2:\n";
+    Grid grid3("resources/CS404SP16RewardMatrixInput2.txt");
+    std::cout << grid3.str() << std::endl;
 }
