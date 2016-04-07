@@ -8,17 +8,29 @@ void Tests::test_grid_class()
 {
     Grid grid;
 
-    std::cout << grid.str() << std::endl;
+    if (grid.str() != "0 0")
+        std::cout << "FAIL: default constructed grid and str\n";
 
     grid.init(7, 4);
 
-    std::cout << grid.str() << std::endl;
+    if (grid.str() != "7 4\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1")
+        std::cout << "FAIL: grid.init(7, 4) and str\n";
 
-    grid.read_from_file("lol");  // test error
+    Grid grid2(7, 4);
 
-    std::cout << grid.str() << std::endl;
+    if (grid2.str() != "7 4\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1")
+        std::cout << "FAIL: Grid grid2(7, 4) and str\n";
 
+    std::cout << "test non-existent file:\n";
+    grid.read_from_file("lol");
+    if (grid.str() != "0 0")
+        std::cout << "FAIL: bad file read_from_file and str\n";
+
+    std::cout << "\ninput file 1:\n";
     grid.read_from_file("resources/CS404SP16RewardMatrixInput1.txt");
+    std::cout << grid.str() << std::endl;
 
+    std::cout << "\ninput file 2:\n";
+    grid.read_from_file("resources/CS404SP16RewardMatrixInput2.txt");
     std::cout << grid.str() << std::endl;
 }
