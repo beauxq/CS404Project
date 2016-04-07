@@ -31,3 +31,6 @@
 *.cbp
 *.depend
 *.layout
+
+# Linux executable
+CS404Project
