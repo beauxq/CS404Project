@@ -142,7 +142,7 @@ std::string Grid::str(const std::vector<bool>& path /* = empty */)
 
             --column;  // this is where the control variable is changed
 
-            if (column != 0)
+            if (column)  // if there are more columns in this row
             {
                 to_return += ' ';
             }
