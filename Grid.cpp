@@ -173,7 +173,6 @@ void Grid::dp_find_min_paths()
         // top row
         if (current_node < column_count)
         {
-            std::cout << "a node in top row\n";  // TODO: get rid of this
             dp_infos.push_back(DP_info(values[current_node] + dp_infos[current_node - 1].min1_cost));
 
             dp_infos[current_node].path.min1_came_from = 1;  // came from left
@@ -183,7 +182,6 @@ void Grid::dp_find_min_paths()
         // left column
         else if (! (current_node % column_count))
         {
-            std::cout << "a node in left column\n";  // TODO: get rid of this
             dp_infos.push_back(DP_info(values[current_node] + dp_infos[current_node - column_count].min1_cost));
 
             dp_infos[current_node].path.min1_came_from = 0;  // came from above
@@ -198,7 +196,6 @@ void Grid::dp_find_min_paths()
         }
     }
     // done finding paths
-    std::cout << "done finding paths\n";
 
     // build paths (in reverse)
     std::vector<bool> first_in_reverse, second_in_reverse;
@@ -236,20 +233,15 @@ void Grid::dp_find_min_paths()
                 second_index -= column_count;
         }
     }
-    std::cout << "done building reverse\n";  // TODO: get rid of this
-    std::cout << "first size: " << first_in_reverse.size() << std::endl;
-    std::cout << "second size: " << second_in_reverse.size() << std::endl;
 
     // reverse orders
     shortest_if_found.clear();
     second_shortest_if_found.clear();
     for (int i = first_in_reverse.size() - 1; i >= 0; --i)
     {
-        std::cout << i << std::endl;
         shortest_if_found.push_back(first_in_reverse[i]);
         second_shortest_if_found.push_back(second_in_reverse[i]);
     }
-    std::cout << "done reversing orders\n";  // TODO: get rid of this
 }
 
 size_t Grid::calculate_index(const size_t& row, const size_t& column) const

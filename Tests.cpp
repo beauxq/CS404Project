@@ -1,48 +1,91 @@
 #include "Tests.h"
 
 #include <iostream>
+#include <string>
 
 #include "Grid.h"
+
+bool Tests::test_equal(const std::string& first, const std::string& second, const std::string& test_name)
+{
+    if (first != second)
+    {
+        std::cout << "FAIL: " << test_name << std::endl;
+        return false;
+    }
+    // first == second
+    std::cout << "PASS: " << test_name << std::endl;
+    return true;
+}
+
 
 void Tests::test_grid_class()
 {
     Grid grid;
-
-    if (grid.str() != "0 0")
-        std::cout << "FAIL: default constructed grid and str\n";
+    test_equal(grid.str(), "0 0", "default constructed grid and str");
 
     grid.init(7, 4);
-
-    if (grid.str() != "7 4\n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 ")
-        std::cout << "FAIL: grid.init(7, 4) and str\n";
+    test_equal(grid.str(),
+               "7 4\n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 ",
+               "grid.init(7, 4) and str");
 
     Grid grid2(7, 4);
-
-    if (grid2.str() != "7 4\n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 ")
-        std::cout << "FAIL: Grid grid2(7, 4) and str\n";
+    test_equal(grid2.str(),
+               "7 4\n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 ",
+               "Grid grid2(7, 4) and str");
 
     std::cout << "test non-existent file:\n";
     grid.read_from_file("lol");
-    if (grid.str() != "0 0")
-        std::cout << "FAIL: bad file read_from_file and str\n";
+    test_equal(grid.str(), "0 0", "bad file read_from_file and str");
 
-    std::cout << "\nread_from_file: input file 1\n";
     grid.read_from_file("resources/CS404SP16RewardMatrixInput1.txt");
-    std::cout << grid.str() << std::endl;
+    test_equal(grid.str(), "7 8\n"
+                           "  1  117   15   11   20   13   15   14 \n"
+                           "117  972  117   14   19   20   11   11 \n"
+                           " 13  117  972  117   18   19   11   20 \n"
+                           " 17   19  117  972  117   15   16   16 \n"
+                           " 12   12   14  117  972  117   12   10 \n"
+                           " 10   12   14   14  117  972  117   20 \n"
+                           " 11   17   13   11   18  117   18   16 ",
+               "given input 1 read and str");
 
-    std::cout << "\nfilename constructor: input file 2:\n";
     Grid grid3("resources/CS404SP16RewardMatrixInput2.txt");
-    std::cout << grid3.str() << std::endl;
+    test_equal(grid3.str(), "9 13\n"
+                            "  2  117  169  154  148  179  137  127  144  128  162  166  153 \n"
+                            "117  188  117  160  157  118  156  154  119  187  169  126  111 \n"
+                            "180  117  188  117  177  188  161  163  122  129  173  150  113 \n"
+                            "159  159  117  188  117  137  182  112  183  151  114  154  123 \n"
+                            "129  120  125  117  188  117  162  135  182  128  153  165  150 \n"
+                            "127  180  162  191  117  188  117  173  180  146  146  120  150 \n"
+                            "176  126  153  163  171  117  188  117  113  115  121  147  185 \n"
+                            "114  132  150  168  121  140  117  188  117  134  190  121  133 \n"
+                            "151  162  168  177  191  175  179  117  146  171  141  191  141 ",
+               "given input 2 construct read and str");
 }
 
 void Tests::test_dp()
 {
     Grid grid(7, 4);
     grid.dp_find_min_paths();
-    std::cout << "shortest:\n";
-    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
-    std::cout << "second shortest:\n";
-    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+    test_equal(grid.str(grid.get_shortest_if_found()),
+               "7 4\n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1- 1- 1-",
+               "Grid(7, 4) shortest");
+    test_equal(grid.str(grid.get_second_shortest_if_found()),
+               "7 4\n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1  1  1 \n"
+               "1- 1- 1  1 \n"
+               "1  1- 1- 1-",
+               "Grid(7, 4) second shortest");
 
     grid.read_from_file("resources/CS404SP16RewardMatrixInput1.txt");
     grid.dp_find_min_paths();
