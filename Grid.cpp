@@ -228,8 +228,9 @@ void Grid::dp_find_min_paths()
     // reverse orders
     shortest_if_found.clear();
     second_shortest_if_found.clear();
-    for (size_t i = first_in_reverse.size() - 1; i >= 0; --i)
+    for (int i = first_in_reverse.size() - 1; i >= 0; --i)
     {
+        std::cout << i << std::endl;
         shortest_if_found.push_back(first_in_reverse[i]);
         second_shortest_if_found.push_back(second_in_reverse[i]);
     }
