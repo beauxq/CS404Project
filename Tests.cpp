@@ -13,12 +13,12 @@ void Tests::test_grid_class()
 
     grid.init(7, 4);
 
-    if (grid.str() != "7 4\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1")
+    if (grid.str() != "7 4\n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 ")
         std::cout << "FAIL: grid.init(7, 4) and str\n";
 
     Grid grid2(7, 4);
 
-    if (grid2.str() != "7 4\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1\n1 1 1 1")
+    if (grid2.str() != "7 4\n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 \n1  1  1  1 ")
         std::cout << "FAIL: Grid grid2(7, 4) and str\n";
 
     std::cout << "test non-existent file:\n";
