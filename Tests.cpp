@@ -38,8 +38,23 @@ void Tests::test_grid_class()
 void Tests::test_dp()
 {
     Grid grid(7, 4);
-
     grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
 
-    std::cout << "did something\n";
+    grid.read_from_file("resources/CS404SP16RewardMatrixInput1.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/CS404SP16RewardMatrixInput2.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
 }

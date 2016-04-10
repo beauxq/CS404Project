@@ -22,12 +22,16 @@ public:
     void init(const size_t& _row_count, const size_t& _column_count);
     /** make grid of specified size filled with value 1 */
 
-    std::string str(const int& path = 0);
+    std::string str(const std::vector<bool>& path = std::vector<bool>());
     /** string representation of grid
-        path = 1 or 2 to display found path */
+        path to display found path */
 
     void dp_find_min_paths();
     /** get two shortest paths - dynamic programming */
+
+    // getters
+    const std::vector<bool>& get_shortest_if_found() const { return shortest_if_found; };
+    const std::vector<bool>& get_second_shortest_if_found() const { return second_shortest_if_found; };
 
     static const unsigned int DEFAULT_VALUE;
 

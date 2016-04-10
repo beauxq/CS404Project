@@ -87,26 +87,29 @@ void Grid::init(const size_t& _row_count, const size_t& _column_count)
     values.assign(row_count * column_count, DEFAULT_VALUE);
 }
 
-std::string Grid::str(const int& path)
+std::string Grid::str(const std::vector<bool>& path /* = empty */)
 {
     /** string representation of grid
         path = 1 or 2 to display found path */
 
+    size_t next_index_on_path = path.empty() ? values.size() : 0;  // no path is drawn if the path is empty
+    auto path_itr = path.begin();
+
     std::string to_return = std::to_string(row_count) + ' ' + std::to_string(column_count);
 
-    auto value = values.begin();  // declare outside of loop because I'm going through it twice
+    size_t value_index = 0;  // declare outside of loop because I'm going through it twice
 
     // find max for spacing columns
     unsigned int max = 0;
-    for ( ; value != values.end(); ++value)
+    for ( ; value_index < values.size(); ++value_index)
     {
-        if (*value > max)
-            max = *value;
+        if (values[value_index] > max)
+            max = values[value_index];
     }
     size_t max_length = std::to_string(max).size();
 
-    // reset iterator
-    value = values.begin();
+    // reset value to beginning
+    value_index = 0;
 
     std::string value_to_write;
     size_t space_to_fill;
@@ -116,7 +119,7 @@ std::string Grid::str(const int& path)
         to_return += '\n';
         for (size_t column = column_count; column > 0; )
         {
-            value_to_write = std::to_string(*value);
+            value_to_write = std::to_string(values[value_index]);
             space_to_fill = max_length - value_to_write.size();  // space to fill
             while (space_to_fill)
             {
@@ -125,6 +128,18 @@ std::string Grid::str(const int& path)
             }
             to_return += value_to_write;
 
+            // draw path
+            if (value_index == next_index_on_path)
+            {
+                to_return += '-';
+                next_index_on_path += *path_itr ? 1 : column_count;  // find next node on path
+                ++path_itr;
+            }
+            else  // not on path
+            {
+                to_return += ' ';
+            }
+
             --column;  // this is where the control variable is changed
 
             if (column != 0)
@@ -132,7 +147,7 @@ std::string Grid::str(const int& path)
                 to_return += ' ';
             }
 
-            ++value;  // vector iterator
+            ++value_index;  // vector iterator
         }
     }
 
