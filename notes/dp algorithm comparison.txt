@@ -1,0 +1,12 @@
+if a < c
+	take a
+	if b < c
+		take b
+	else
+		take c
+else
+	take c
+	if a < d
+		take a
+	else
+		take d

@@ -137,6 +137,47 @@ std::string Grid::str()
     return to_return;
 }
 
+std::vector<bool> Grid::dp_find_min_paths()
+{
+    /** get two shortest paths - dynamic programming */
+
+    dp_infos.clear();  // make sure there's no info already in the table
+
+    // node 1, 1  top left
+    dp_infos.push_back(DP_info(values[0]));  // the minimum cost to get to 1, 1 is the cost of 1, 1
+    dp_infos[0].path.min1_came_from_min = 0;  // null, beginning of path
+    dp_infos[0].path.min2_came_from_min = 0;  // null, beginning of path
+
+    // every node, left to right, top to bottom
+    for (size_t current_node = 1; current_node < values.size(); ++current_node)
+    {
+        // top row
+        if (current_node < column_count)
+        {
+            dp_infos.push_back(DP_info(values[current_node] + dp_infos[current_node - 1].min1_cost));
+
+            dp_infos[current_node].path.min1_came_from = 1;  // came from left
+            dp_infos[current_node].path.min1_came_from_min = 1;  // came from shortest
+            dp_infos[current_node].path.min2_came_from_min = 0;  // null, there is no 2nd shortest path to anything on the top row
+        }
+        // left column
+        else if (! (current_node % column_count))
+        {
+            dp_infos.push_back(DP_info(values[current_node] + dp_infos[current_node - column_count].min1_cost));
+
+            dp_infos[current_node].path.min1_came_from = 0;  // came from above
+            dp_infos[current_node].path.min1_came_from_min = 1;  // came from shortest
+            dp_infos[current_node].path.min2_came_from_min = 0;  // null, there is no 2nd shortest path to anything in left column
+        }
+        else  // neither top row, nor left column
+        {
+            dp_infos.push_back(DP_info());
+
+            two_mins_of_four(current_node);
+        }
+    }
+}
+
 size_t Grid::calculate_index(const size_t& row, const size_t& column) const
 {
     /** calculate the index in the value vector (0-based)
@@ -155,4 +196,66 @@ bool Grid::read_error()
 
     std::cerr << "invalid input file\n";
     return false;
+}
+
+void Grid::two_mins_of_four(size_t current_node)
+{
+    /** primary per-node comparison and choosing of dynamic programming algorithm */
+
+    // TODO: proofread this
+    size_t above = current_node - column_count;
+    size_t left = current_node - 1;
+
+    if (dp_infos[above].min1_cost < dp_infos[left].min1_cost)
+    {
+        // min1 comes from min1 above
+        dp_infos[current_node].min1_cost = dp_infos[above].min1_cost + values[current_node];
+
+        dp_infos[current_node].path.min1_came_from_min = 1;
+        dp_infos[current_node].path.min1_came_from = 0;
+
+        if (dp_infos[above].min2_cost < dp_infos[left].min1_cost)
+        {
+            // min2 comes from min2 above
+            dp_infos[current_node].min2_cost = dp_infos[above].min2_cost + values[current_node];
+
+            dp_infos[current_node].path.min2_came_from_min = 2;
+            dp_infos[current_node].path.min2_came_from = 0;
+        }
+        else  // above min2 >= left min1
+        {
+            // min2 comes from min1 left
+            dp_infos[current_node].min2_cost = dp_infos[left].min1_cost + values[current_node];
+
+            dp_infos[current_node].path.min2_came_from_min = 1;
+            dp_infos[current_node].path.min2_came_from = 1;
+        }
+    }
+    // prefer left when == because that means above came earlier,
+    // in more significant digit when path is interpreted as a number
+    else  // above min1 >= left min1
+    {
+        // min1 comes from min1 left
+        dp_infos[current_node].min1_cost = dp_infos[left].min1_cost + values[current_node];
+
+        dp_infos[current_node].path.min1_came_from_min = 1;
+        dp_infos[current_node].path.min1_came_from = 1;
+
+        if (dp_infos[above].min1_cost < dp_infos[left].min2_cost)
+        {
+            // min2 comes from min1 above
+            dp_infos[current_node].min2_cost = dp_infos[above].min1_cost + values[current_node];
+
+            dp_infos[current_node].path.min2_came_from_min = 1;
+            dp_infos[current_node].path.min2_came_from = 0;
+        }
+        else  // above min1 >= left min2
+        {
+            // min2 comes from min2 left
+            dp_infos[current_node].min2_cost = dp_infos[left].min2_cost + values[current_node];
+
+            dp_infos[current_node].path.min2_came_from_min = 2;
+            dp_infos[current_node].path.min2_came_from = 1;
+        }
+    }
 }

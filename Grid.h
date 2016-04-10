@@ -4,13 +4,15 @@
 #include <string>
 #include <vector>
 
+#include "DP_info.h"
+
 class Grid
 {
 public:
     Grid() : row_count(0), column_count(0) {};
     Grid(const std::string& filename);
     Grid(const size_t& _row_count, const size_t& _column_count);
-    /*
+    /* TODO: get rid of copy constructor and assignment operator?
     Grid(const Grid& other);
     Grid& operator= (const Grid& other); */
 
@@ -22,6 +24,9 @@ public:
 
     std::string str();
     /** string representation of grid */
+
+    std::vector<bool> dp_find_min_paths();
+    /** get two shortest paths - dynamic programming */
 
     static const unsigned int DEFAULT_VALUE;
 
@@ -35,7 +40,11 @@ private:
     bool read_error();
     /** set Grid to empty, output error, return false */
 
+    void two_mins_of_four(size_t current_node);
+    /** primary per-node comparison and choosing of dynamic programming algorithm */
+
     std::vector<unsigned int> values;  // the cost of using each node
+    std::vector<DP_info> dp_infos;
     size_t row_count;
     size_t column_count;
 };
