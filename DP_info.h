@@ -9,13 +9,14 @@
 
 struct Path
 {
-    uint8_t min1_came_from_min;
-    // 0 null, 1 came from the shortest, 2 came from the 2nd shortest
+    // uint8_t min1_came_from_min;
 
     bool min1_came_from;
     // direction, 0 from above, 1 from left
 
     uint8_t min2_came_from_min;
+    // 0 null, 1 came from the shortest, 2 came from the 2nd shortest
+
     bool min2_came_from;
 };
 

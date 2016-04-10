@@ -22,10 +22,11 @@ public:
     void init(const size_t& _row_count, const size_t& _column_count);
     /** make grid of specified size filled with value 1 */
 
-    std::string str();
-    /** string representation of grid */
+    std::string str(const int& path = 0);
+    /** string representation of grid
+        path = 1 or 2 to display found path */
 
-    std::vector<bool> dp_find_min_paths();
+    void dp_find_min_paths();
     /** get two shortest paths - dynamic programming */
 
     static const unsigned int DEFAULT_VALUE;
@@ -40,13 +41,16 @@ private:
     bool read_error();
     /** set Grid to empty, output error, return false */
 
-    void two_mins_of_four(size_t current_node);
+    void two_mins_of_four(const size_t& current_node);
     /** primary per-node comparison and choosing of dynamic programming algorithm */
 
     std::vector<unsigned int> values;  // the cost of using each node
     std::vector<DP_info> dp_infos;
     size_t row_count;
     size_t column_count;
+
+    std::vector<bool> shortest_if_found;
+    std::vector<bool> second_shortest_if_found;
 };
 
 #endif // GRID_H

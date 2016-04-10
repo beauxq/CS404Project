@@ -34,3 +34,12 @@ void Tests::test_grid_class()
     Grid grid3("resources/CS404SP16RewardMatrixInput2.txt");
     std::cout << grid3.str() << std::endl;
 }
+
+void Tests::test_dp()
+{
+    Grid grid(7, 4);
+
+    grid.dp_find_min_paths();
+
+    std::cout << "did something\n";
+}
