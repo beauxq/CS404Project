@@ -57,4 +57,67 @@ void Tests::test_dp()
     std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
     std::cout << "second shortest:\n";
     std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput1.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput2.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput3.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput4.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput5.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput6.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput7.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput8.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
+
+    grid.read_from_file("resources/myInput9.txt");
+    grid.dp_find_min_paths();
+    std::cout << "shortest:\n";
+    std::cout << grid.str(grid.get_shortest_if_found()) << std::endl;
+    std::cout << "second shortest:\n";
+    std::cout << grid.str(grid.get_second_shortest_if_found()) << std::endl;
 }

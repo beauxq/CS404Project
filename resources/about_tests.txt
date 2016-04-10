@@ -1,0 +1,3 @@
+3   find a bunch of 1s in the corner when there's a 0 in the middle
+4-5 test 2 very separate shortest paths
+6-9 test 2 equal shortest paths
