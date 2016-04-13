@@ -22,9 +22,15 @@ public:
     void init(const size_t& _row_count, const size_t& _column_count);
     /** make grid of specified size filled with value 1 */
 
-    std::string str(const std::vector<bool>& path = std::vector<bool>());
-    /** string representation of grid
+    std::string visual_str(const std::vector<bool>& path = std::vector<bool>());
+    /** visual representation of grid
         path to display found path */
+
+    std::string data_str(const bool& omit_ones = true);
+    /** output data as given in input files */
+
+    std::string path_str(const std::vector<bool>& path);
+    /** zeros and ones to represent path */
 
     void dp_find_min_paths();
     /** get two shortest paths - dynamic programming */

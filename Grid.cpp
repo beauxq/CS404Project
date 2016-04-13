@@ -87,10 +87,10 @@ void Grid::init(const size_t& _row_count, const size_t& _column_count)
     values.assign(row_count * column_count, DEFAULT_VALUE);
 }
 
-std::string Grid::str(const std::vector<bool>& path /* = empty */)
+std::string Grid::visual_str(const std::vector<bool>& path /* = empty */)
 {
-    /** string representation of grid
-        path = 1 or 2 to display found path */
+    /** visual representation of grid
+        path to display found path */
 
     size_t next_index_on_path = path.empty() ? values.size() : 0;  // no path is drawn if the path is empty
     auto path_itr = path.begin();
@@ -149,6 +149,48 @@ std::string Grid::str(const std::vector<bool>& path /* = empty */)
 
             ++value_index;  // vector iterator
         }
+    }
+
+    return to_return;
+}
+
+std::string Grid::data_str(const bool& omit_ones /* = true */ )
+{
+    /** output data as given in input files */
+
+    size_t row = 1;
+    size_t column = 1;
+
+    std::string to_return = std::to_string(row_count) + ", " + std::to_string(column_count) + '\n';
+
+    for (auto value = values.begin(); value != values.end(); ++value)
+    {
+        if (! (*value == 1 && omit_ones))
+            to_return += std::to_string(row) + ", " + std::to_string(column) + ", " + std::to_string(*value) + '\n';
+
+        ++column;
+        if (column > column_count)
+        {
+            column = 1;
+            ++row;
+        }
+    }
+
+    return to_return;
+}
+
+std::string Grid::path_str(const std::vector<bool>& path)
+{
+    /** zeros and ones to represent path */
+
+    std::string to_return = std::to_string(path[0]);
+
+    auto step = path.begin();
+    ++step;
+
+    for ( ; step != path.end(); ++step)
+    {
+        to_return += ' ' + std::to_string(*step);
     }
 
     return to_return;
