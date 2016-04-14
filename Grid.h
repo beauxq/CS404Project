@@ -3,13 +3,17 @@
 
 #include <string>
 #include <vector>
+#include <climits>
 
 #include "DP_info.h"
 
 class Grid
 {
 public:
-    Grid() : row_count(0), column_count(0) {};
+    Grid() : row_count(0),
+             column_count(0),
+             cost_of_shortest_if_found(ULLONG_MAX),
+             cost_of_second_shortest_if_found(ULLONG_MAX) {};
     Grid(const std::string& filename);
     Grid(const size_t& _row_count, const size_t& _column_count);
     /* TODO: get rid of copy constructor and assignment operator?
@@ -35,9 +39,17 @@ public:
     void dp_find_min_paths();
     /** get two shortest paths - dynamic programming */
 
+    void dspa_find_min_paths();
+    /** get two shortest paths - dijkstra modification */
+
+    void clear_found_paths();
+    /** empty shortest paths and costs ULLONG_MAX */
+
     // getters
-    const std::vector<bool>& get_shortest_if_found() const { return shortest_if_found; };
-    const std::vector<bool>& get_second_shortest_if_found() const { return second_shortest_if_found; };
+    const std::vector<bool>& get_shortest_if_found() const { return shortest_if_found; }
+    const std::vector<bool>& get_second_shortest_if_found() const { return second_shortest_if_found; }
+    const unsigned long long int& get_cost_of_shortest_if_found() const { return cost_of_shortest_if_found; }
+    const unsigned long long int& get_cost_of_second_shortest_if_found() const { return cost_of_second_shortest_if_found; }
 
     static const unsigned int DEFAULT_VALUE;
 
@@ -61,6 +73,8 @@ private:
 
     std::vector<bool> shortest_if_found;
     std::vector<bool> second_shortest_if_found;
+    unsigned long long int cost_of_shortest_if_found;
+    unsigned long long int cost_of_second_shortest_if_found;
 };
 
 #endif // GRID_H
