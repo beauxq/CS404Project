@@ -17,7 +17,9 @@ namespace Tests
 
     int test_both_algorithms(const std::string& filename,
                              const std::string& expected_shortest,
-                             const std::string& expected_second_shortest);
+                             const std::string& expected_second_shortest,
+                             const std::string& expected_shortest_binary,
+                             const std::string& expected_second_shortest_binary);
 }
 
 #endif // TESTS_H_INCLUDED

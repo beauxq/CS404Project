@@ -184,7 +184,9 @@ int Tests::test_path_algorithms()
                                        " 17   19  117  972  117   15   16-  16-\n"
                                        " 12   12   14  117  972  117   12   10-\n"
                                        " 10   12   14   14  117  972  117   20-\n"
-                                       " 11   17   13   11   18  117   18   16-");
+                                       " 11   17   13   11   18  117   18   16-",
+                                       "1 1 1 1 1 1 0 0 0 0 1 0 0",
+                                       "1 1 1 1 1 1 0 0 0 1 0 0 0");
 
     fail_count += test_both_algorithms("resources/CS404SP16RewardMatrixInput2.txt",
                                        "9 13\n"
@@ -206,7 +208,9 @@ int Tests::test_path_algorithms()
                                        "127  180  162  191  117  188  117- 173- 180  146  146  120  150 \n"
                                        "176  126  153  163  171  117  188  117- 113- 115- 121- 147- 185 \n"
                                        "114  132  150  168  121  140  117  188  117  134  190  121- 133-\n"
-                                       "151  162  168  177  191  175  179  117  146  171  141  191  141-");
+                                       "151  162  168  177  191  175  179  117  146  171  141  191  141-",
+                                       "1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 0 1 0",
+                                       "0 0 1 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1 0");
 
     fail_count += test_both_algorithms("resources/myInput1.txt",
                                        "5 5\n"
@@ -220,7 +224,9 @@ int Tests::test_path_algorithms()
                                        "  3    2    2-   1-  99 \n"
                                        "  6    4    3    1-  99 \n"
                                        "  9    2  100    3-   1-\n"
-                                       "  7   11    4    2    5-");
+                                       "  7   11    4    2    5-",
+                                       "1 0 1 1 0 0 1 0",
+                                       "1 1 0 1 0 0 1 0");
 
     fail_count += test_both_algorithms("resources/myInput2.txt",
                                        "5 5\n"
@@ -234,7 +240,9 @@ int Tests::test_path_algorithms()
                                        "  3    2-   2-   1-  99 \n"
                                        "  6    4    3    1-  99 \n"
                                        "  9    2  100    3-   1 \n"
-                                       "  7   11    4    2-   5-");
+                                       "  7   11    4    2-   5-",
+                                       "1 0 1 1 0 0 1 0",
+                                       "1 0 1 1 0 0 0 1");
 
     fail_count += test_both_algorithms("resources/myInput3.txt",
                                        "5 5\n"
@@ -248,7 +256,9 @@ int Tests::test_path_algorithms()
                                        "97  98  98  99-  1-\n"
                                        "94  96  97  99   1-\n"
                                        "91  98   0  97  99-\n"
-                                       "93  89  96  98  95-");
+                                       "93  89  96  98  95-",
+                                       "1 1 1 1 0 0 0 0",
+                                       "1 1 1 0 1 0 0 0");
 
     fail_count += test_both_algorithms("resources/myInput4.txt",
                                        "5 5\n"
@@ -262,7 +272,9 @@ int Tests::test_path_algorithms()
                                        "  4- 100  100  100   11 \n"
                                        "  6- 100  100  100    1 \n"
                                        "  9- 100  100  100    4 \n"
-                                       "  4-  12-   2-   3-  10-");
+                                       "  4-  12-   2-   3-  10-",
+                                       "1 1 1 1 0 0 0 0",
+                                       "0 0 0 0 1 1 1 1");
 
     fail_count += test_both_algorithms("resources/myInput5.txt",
                                        "5 5\n"
@@ -276,7 +288,9 @@ int Tests::test_path_algorithms()
                                        "  4- 100  100  100   11 \n"
                                        "  6- 100  100  100    1 \n"
                                        "  9-   4- 100  100    4 \n"
-                                       "100   12-   2-   3-  10-");
+                                       "100   12-   2-   3-  10-",
+                                       "1 1 1 1 0 0 0 0",
+                                       "0 0 0 1 0 1 1 1");
 
     fail_count += test_both_algorithms("resources/myInput6.txt",
                                        "5 5\n"
@@ -290,7 +304,9 @@ int Tests::test_path_algorithms()
                                        "  4  100  100  100   11-\n"
                                        "  6  100  100  100    1-\n"
                                        "  9    3  100  100    4-\n"
-                                       "100   12    2    3   10-");
+                                       "100   12    2    3   10-",
+                                       "0 0 0 1 0 1 1 1",
+                                       "1 1 1 1 0 0 0 0");
 
     fail_count += test_both_algorithms("resources/myInput7.txt",
                                        "5 5\n"
@@ -304,7 +320,9 @@ int Tests::test_path_algorithms()
                                        "  4  100  100    5-  11-\n"
                                        "  6  100  100  100    1-\n"
                                        "  9    3  100  100    4-\n"
-                                       "100   12    2    3   10-");
+                                       "100   12    2    3   10-",
+                                       "0 0 0 1 0 1 1 1",
+                                       "1 1 1 0 1 0 0 0");
 
     fail_count += test_both_algorithms("resources/myInput8.txt",
                                        "5 5\n"
@@ -318,7 +336,9 @@ int Tests::test_path_algorithms()
                                        "  4  100  100    5-  11-\n"
                                        "  6  100  100  100    1-\n"
                                        "  9  100  100  100    4-\n"
-                                       "  3   12    2    3   10-");
+                                       "  3   12    2    3   10-",
+                                       "0 0 0 0 1 1 1 1",
+                                       "1 1 1 0 1 0 0 0");
 
     fail_count += test_both_algorithms("resources/myInput9.txt",
                                        "5 5\n"
@@ -332,38 +352,53 @@ int Tests::test_path_algorithms()
                                        "  4  100  100  100   11-\n"
                                        "  6  100  100  100    1-\n"
                                        "  9  100  100  100    4-\n"
-                                       "  3   12    2    3   10-");
+                                       "  3   12    2    3   10-",
+                                       "0 0 0 0 1 1 1 1",
+                                       "1 1 1 1 0 0 0 0");
 
     return fail_count;
 }
 
 int Tests::test_both_algorithms(const std::string& filename,
                                 const std::string& expected_shortest,
-                                const std::string& expected_second_shortest)
+                                const std::string& expected_second_shortest,
+                                const std::string& expected_shortest_binary,
+                                const std::string& expected_second_shortest_binary)
 {
     int fail_count = 0;
     std::string test_name_prefix = filename.substr(10, filename.find_last_of('.') - 10);
 
     Grid grid(filename);
     grid.dp_find_min_paths();
-    fail_count += !
-    test_equal(grid.visual_str(grid.get_shortest_if_found()),
-               expected_shortest,
-               test_name_prefix + " dp shortest");
-    fail_count += !
-    test_equal(grid.visual_str(grid.get_second_shortest_if_found()),
-               expected_second_shortest,
-               test_name_prefix + " dp second shortest");
+
+    fail_count += ! test_equal(grid.visual_str(grid.get_shortest_if_found()),
+                               expected_shortest,
+                               test_name_prefix + " dp shortest");
+    fail_count += ! test_equal(grid.visual_str(grid.get_second_shortest_if_found()),
+                               expected_second_shortest,
+                               test_name_prefix + " dp second shortest");
+    fail_count += ! test_equal(grid.path_str(grid.get_shortest_if_found()),
+                               expected_shortest_binary,
+                               test_name_prefix + " dp shortest binary");
+    fail_count += ! test_equal(grid.path_str(grid.get_second_shortest_if_found()),
+                               expected_second_shortest_binary,
+                               test_name_prefix + " dp second shortest binary");
+
     grid.clear_found_paths();
     grid.dspa_find_min_paths();
-    fail_count += !
-    test_equal(grid.visual_str(grid.get_shortest_if_found()),
-               expected_shortest,
-               test_name_prefix + " dspa shortest");
-    fail_count += !
-    test_equal(grid.visual_str(grid.get_second_shortest_if_found()),
-               expected_second_shortest,
-               test_name_prefix + " dspa second shortest");
+
+    fail_count += ! test_equal(grid.visual_str(grid.get_shortest_if_found()),
+                               expected_shortest,
+                               test_name_prefix + " dspa shortest");
+    fail_count += ! test_equal(grid.visual_str(grid.get_second_shortest_if_found()),
+                               expected_second_shortest,
+                               test_name_prefix + " dspa second shortest");
+    fail_count += ! test_equal(grid.path_str(grid.get_shortest_if_found()),
+                               expected_shortest_binary,
+                               test_name_prefix + " dspa shortest binary");
+    fail_count += ! test_equal(grid.path_str(grid.get_second_shortest_if_found()),
+                               expected_second_shortest_binary,
+                               test_name_prefix + " dspa second shortest binary");
 
     return fail_count;
 }
