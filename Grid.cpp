@@ -4,7 +4,11 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <utility>  // pair
+#include <utility>  // pair  // TODO: is this still used?
+#include <queue>  // priority queue
+#include <climits>
+
+#include "DSPA_path.h"
 
 const unsigned int Grid::DEFAULT_VALUE = 1;  // default cost of each node
 
@@ -75,6 +79,8 @@ bool Grid::read_from_file(const std::string& filename)
         values[calculate_index(coord_row, coord_column)] = value;
     }
 
+    clear_found_paths();
+
     return true;
 }
 
@@ -85,6 +91,8 @@ void Grid::init(const size_t& _row_count, const size_t& _column_count)
     row_count = _row_count;
     column_count = _column_count;
     values.assign(row_count * column_count, DEFAULT_VALUE);
+
+    clear_found_paths();
 }
 
 std::string Grid::visual_str(const std::vector<bool>& path /* = empty */)
@@ -183,6 +191,9 @@ std::string Grid::path_str(const std::vector<bool>& path)
 {
     /** zeros and ones to represent path */
 
+    if (path.empty())
+        return std::string();
+
     std::string to_return = std::to_string(path[0]);
 
     auto step = path.begin();
@@ -198,9 +209,10 @@ std::string Grid::path_str(const std::vector<bool>& path)
 
 void Grid::dp_find_min_paths()
 {
-    /** get two shortest paths - dynamic programming
-        @returns paths backwards (end to start, m,n to 1,1)
-                 first = shortest, second = second shortest */
+    /** get two shortest paths - dynamic programming */
+
+    if (values.size() < 4)
+        return;  // there are not 2 paths
 
     dp_infos.clear();  // make sure there's no info already in the table
 
@@ -277,13 +289,90 @@ void Grid::dp_find_min_paths()
     }
 
     // reverse orders
-    shortest_if_found.clear();
-    second_shortest_if_found.clear();
+    clear_found_paths();
     for (int i = first_in_reverse.size() - 1; i >= 0; --i)
     {
         shortest_if_found.push_back(first_in_reverse[i]);
         second_shortest_if_found.push_back(second_in_reverse[i]);
     }
+    cost_of_shortest_if_found = dp_infos[values.size() - 1].min1_cost;
+    cost_of_second_shortest_if_found = dp_infos[values.size() - 1].min2_cost;
+}
+
+void Grid::dspa_find_min_paths()
+{
+    /** get two shortest paths - dijkstra modification */
+
+    if (values.size() < 4)
+        return;  // there are not 2 paths
+
+    const int8_t TARGET_PATH_COUNT = 2;
+    const size_t LAST_NODE = values.size() - 1;
+
+    std::vector<DSPA_path> final_paths;  // this will hold the to paths that we find
+    std::vector<int8_t> path_counts(values.size(), 0);  // how many paths found for each node
+    std::priority_queue<DSPA_path, std::vector<DSPA_path>, comparator> path_min_heap;  // all of the paths we find
+    DSPA_path working_path, new_path;
+
+    new_path.cost = values[0];
+    new_path.end_node = 0;
+    path_min_heap.push(new_path);
+
+    while ((!path_min_heap.empty()) && path_counts[LAST_NODE] < TARGET_PATH_COUNT)
+    {
+        working_path = path_min_heap.top();
+        path_min_heap.pop();
+
+        // std::cout << "took path from heap: " << path_str(working_path.path) << "\nwith cost: " << working_path.cost << std::endl;
+
+        ++path_counts[working_path.end_node];
+
+        if (working_path.end_node == LAST_NODE)
+            final_paths.push_back(working_path);  // this is a path for the final result
+
+        if (path_counts[working_path.end_node] <= TARGET_PATH_COUNT)
+        {
+            // if not the right-most column
+            if ((working_path.end_node + 1) % column_count)
+            {
+                new_path.end_node = working_path.end_node + 1;  // the node to the right of the end of the path
+                new_path.cost = working_path.cost + values[new_path.end_node];
+                new_path.path = working_path.path;
+                new_path.path.push_back(1);  // path to the right
+
+                path_min_heap.push(new_path);
+            }
+            // if not the bottom row
+            if (working_path.end_node < (values.size() - column_count))
+            {
+                new_path.end_node = working_path.end_node + column_count;  // the node below the end of the path
+                new_path.cost = working_path.cost + values[new_path.end_node];
+                new_path.path = working_path.path;
+                new_path.path.push_back(0);  // path down
+
+                path_min_heap.push(new_path);
+            }
+        }
+    }
+
+    if (final_paths.size() < TARGET_PATH_COUNT)
+        return;  // didn't find enough paths (grid either m by 1 or 1 by n)
+
+    shortest_if_found = final_paths[0].path;
+    second_shortest_if_found = final_paths[1].path;
+
+    cost_of_shortest_if_found = final_paths[0].cost;
+    cost_of_second_shortest_if_found = final_paths[1].cost;
+}
+
+void Grid::clear_found_paths()
+{
+    /** empty shortest paths and costs ULLONG_MAX */
+
+    shortest_if_found.clear();
+    second_shortest_if_found.clear();
+    cost_of_shortest_if_found = ULLONG_MAX;
+    cost_of_second_shortest_if_found = ULLONG_MAX;
 }
 
 size_t Grid::calculate_index(const size_t& row, const size_t& column) const
@@ -298,9 +387,7 @@ bool Grid::read_error()
 {
     /** set Grid to empty, output error, return false */
 
-    row_count = 0;
-    column_count = 0;
-    values.clear();
+    init(0, 0);
 
     std::cerr << "invalid input file\n";
     return false;

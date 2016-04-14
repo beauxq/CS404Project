@@ -1,10 +1,14 @@
+#include <iostream>
+
 #include "Tests.h"
 
 int main()
 {
-    Tests::test_grid_class();
+    int fail_count = Tests::test_grid_class();
 
-    Tests::test_dp();
+    fail_count += Tests::test_path_algorithms();
+
+    std::cout << "Fail count: " << fail_count << std::endl;
 
     return 0;
 }
