@@ -63,11 +63,10 @@ private:
     bool read_error();
     /** set Grid to empty, output error, return false */
 
-    void two_mins_of_four(const size_t& current_node);
+    void two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp_infos);
     /** primary per-node comparison and choosing of dynamic programming algorithm */
 
     std::vector<unsigned int> values;  // the cost of using each node
-    std::vector<DP_info> dp_infos;
     size_t row_count;
     size_t column_count;
 

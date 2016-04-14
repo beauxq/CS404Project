@@ -359,6 +359,23 @@ int Tests::test_path_algorithms()
     return fail_count;
 }
 
+int Tests::test_big_grids()
+{
+    Grid grid(10000, 10000);
+
+    //std::cout << "starting dp for 10000x10000\n";
+    //grid.dp_find_min_paths();
+    //std::cout << "finished dp for 10000x10000\n";
+
+    grid.clear_found_paths();
+
+    std::cout << "starting dspa for 10000x10000\n";
+    grid.dspa_find_min_paths();
+    std::cout << "finished dspa for 10000x10000\n";
+
+    return 0;
+}
+
 int Tests::test_both_algorithms(const std::string& filename,
                                 const std::string& expected_shortest,
                                 const std::string& expected_second_shortest,

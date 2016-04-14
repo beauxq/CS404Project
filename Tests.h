@@ -14,6 +14,7 @@ namespace Tests
 
     int test_grid_class();
     int test_path_algorithms();
+    int test_big_grids();
 
     int test_both_algorithms(const std::string& filename,
                              const std::string& expected_shortest,

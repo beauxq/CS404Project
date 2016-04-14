@@ -214,7 +214,9 @@ void Grid::dp_find_min_paths()
     if (values.size() < 4)
         return;  // there are not 2 paths
 
-    dp_infos.clear();  // make sure there's no info already in the table
+    std::vector<DP_info> dp_infos;
+    // TODO: separate dp_infos into separate vectors
+    // we only need 1 row of costs (maybe 2)
 
     // node 1, 1  top left
     dp_infos.push_back(DP_info(values[0]));  // the minimum cost to get to 1, 1 is the cost of 1, 1
@@ -246,7 +248,7 @@ void Grid::dp_find_min_paths()
         {
             dp_infos.push_back(DP_info());
 
-            two_mins_of_four(current_node);
+            two_mins_of_four(current_node, dp_infos);
         }
     }
     // done finding paths
@@ -393,7 +395,7 @@ bool Grid::read_error()
     return false;
 }
 
-void Grid::two_mins_of_four(const size_t& current_node)
+void Grid::two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp_infos)
 {
     /** primary per-node comparison and choosing of dynamic programming algorithm */
 
