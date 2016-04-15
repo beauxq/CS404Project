@@ -410,7 +410,9 @@ void Grid::two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp
         // dp_infos[current_node].path.min1_came_from_min = 1;  // min1  // TODO: get rid of this (always 1)
         dp_infos[current_node].path.min1_came_from = 0;  // above
 
-        if (dp_infos[above].min2_cost < dp_infos[left].min1_cost)
+        if ((dp_infos[above].min2_cost < dp_infos[left].min1_cost) ||
+            ((dp_infos[above].min2_cost == dp_infos[left].min1_cost) &&
+             (dp_infos[above].path.min2_came_from_min == 2)))
         {
             // min2 comes from min2 above
             dp_infos[current_node].min2_cost = dp_infos[above].min2_cost + values[current_node];
@@ -437,7 +439,9 @@ void Grid::two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp
         // dp_infos[current_node].path.min1_came_from_min = 1;  // min1  // TODO: get rid of this (always 1)
         dp_infos[current_node].path.min1_came_from = 1;  // left
 
-        if (dp_infos[above].min1_cost < dp_infos[left].min2_cost)
+        if ((dp_infos[above].min1_cost < dp_infos[left].min2_cost) ||
+            ((dp_infos[above].min1_cost == dp_infos[left].min2_cost) &&
+             ((dp_infos[left].path.min2_came_from_min == 2))))  // left second shortest came from second shortest
         {
             // min2 comes from min1 above
             dp_infos[current_node].min2_cost = dp_infos[above].min1_cost + values[current_node];

@@ -15,6 +15,7 @@ bool Tests::test_equal(const std::string& first,
     if (first != second)
     {
         std::cout << " ** FAIL ** : " << test_name << std::endl;
+        std::cout << "    expected:\n" << second << "\n    result:\n" << first << std::endl;
         return false;
     }
     // first == second
@@ -456,7 +457,7 @@ int Tests::test_path_algorithms()
                                        "1 0 1 1 0 0 1 0",
                                        "1 0 1 1 0 0 0 1");
 
-    fail_count += test_both_algorithms("resources/myInput3.txt",
+    fail_count += test_both_algorithms("resources/myInput3 lows top right lower in mid.txt",
                                        "5 5\n"
                                        "98- 99- 98-  1-  1-\n"
                                        "97  98  98  99   1-\n"
@@ -472,7 +473,7 @@ int Tests::test_path_algorithms()
                                        "1 1 1 1 0 0 0 0",
                                        "1 1 1 0 1 0 0 0");
 
-    fail_count += test_both_algorithms("resources/myInput4.txt",
+    fail_count += test_both_algorithms("resources/myInput4 top right and bot left.txt",
                                        "5 5\n"
                                        "  2-   3-   8-   7-   5-\n"
                                        "  4  100  100  100   11-\n"
@@ -488,7 +489,7 @@ int Tests::test_path_algorithms()
                                        "1 1 1 1 0 0 0 0",
                                        "0 0 0 0 1 1 1 1");
 
-    fail_count += test_both_algorithms("resources/myInput5.txt",
+    fail_count += test_both_algorithms("resources/myInput5 top right bot left out bot left.txt",
                                        "5 5\n"
                                        "  2-   3-   8-   7-   5-\n"
                                        "  4  100  100  100   11-\n"
@@ -504,7 +505,7 @@ int Tests::test_path_algorithms()
                                        "1 1 1 1 0 0 0 0",
                                        "0 0 0 1 0 1 1 1");
 
-    fail_count += test_both_algorithms("resources/myInput6.txt",
+    fail_count += test_both_algorithms("resources/myInput6 sides equal out bot left.txt",
                                        "5 5\n"
                                        "  2-   3    8    7    5 \n"
                                        "  4- 100  100  100   11 \n"
@@ -520,7 +521,7 @@ int Tests::test_path_algorithms()
                                        "0 0 0 1 0 1 1 1",
                                        "1 1 1 1 0 0 0 0");
 
-    fail_count += test_both_algorithms("resources/myInput7.txt",
+    fail_count += test_both_algorithms("resources/myInput7 sides equal both out.txt",
                                        "5 5\n"
                                        "  2-   3    8    7  100 \n"
                                        "  4- 100  100    5   11 \n"
@@ -536,7 +537,7 @@ int Tests::test_path_algorithms()
                                        "0 0 0 1 0 1 1 1",
                                        "1 1 1 0 1 0 0 0");
 
-    fail_count += test_both_algorithms("resources/myInput8.txt",
+    fail_count += test_both_algorithms("resources/myInput8 sides equal out top right.txt",
                                        "5 5\n"
                                        "  2-   3    8    7  100 \n"
                                        "  4- 100  100    5   11 \n"
@@ -552,7 +553,7 @@ int Tests::test_path_algorithms()
                                        "0 0 0 0 1 1 1 1",
                                        "1 1 1 0 1 0 0 0");
 
-    fail_count += test_both_algorithms("resources/myInput9.txt",
+    fail_count += test_both_algorithms("resources/myInput9 sides equal.txt",
                                        "5 5\n"
                                        "  2-   3    8    7    5 \n"
                                        "  4- 100  100  100   11 \n"
@@ -567,6 +568,22 @@ int Tests::test_path_algorithms()
                                        "  3   12    2    3   10-",
                                        "0 0 0 0 1 1 1 1",
                                        "1 1 1 1 0 0 0 0");
+
+    fail_count += test_both_algorithms("resources/myInput22 var in same dir.txt",
+                                       "5 5\n"
+                                       "  2-   1-   2-  99   99 \n"
+                                       "  3    3    2-   1-  99 \n"
+                                       "  6    4    3    1-  99 \n"
+                                       "  9    2  100    3-   1-\n"
+                                       "  7   11    4    2    5-",
+                                       "5 5\n"
+                                       "  2-   1-   2   99   99 \n"
+                                       "  3    3-   2-   1-  99 \n"
+                                       "  6    4    3    1-  99 \n"
+                                       "  9    2  100    3-   1-\n"
+                                       "  7   11    4    2    5-",
+                                       "1 1 0 1 0 0 1 0",
+                                       "1 0 1 1 0 0 1 0");
 
     return fail_count;
 }
