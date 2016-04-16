@@ -66,6 +66,22 @@ private:
     void two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp_infos);
     /** primary per-node comparison and choosing of dynamic programming algorithm */
 
+    void set_min1(const bool& comes_from_min,
+                  const bool& comes_from,
+                  const size_t& index_of_from,
+                  std::vector<DP_info>& dp_infos,
+                  const size_t& current_node);
+    /** set information about the second shortest path
+        information about shortest path should be set before this is called
+        (dp_infos[current_node].path.min1_came_from)
+        comes_from_min: 0 if this second shortest path comes
+                        from the shortest path to the node that it came from
+                        1 if it comes from the second shortest
+        comes_from:     the direction that this second shortest path came from
+                        0 came from above
+                        1 came from left
+        index:          index of the node that it came from */
+
     std::vector<unsigned int> values;  // the cost of using each node
     size_t row_count;
     size_t column_count;
