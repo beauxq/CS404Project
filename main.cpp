@@ -8,7 +8,7 @@ int main()
 
     fail_count += Tests::test_path_algorithms();
 
-    // fail_count += Tests::test_big_grids();
+    fail_count += Tests::test_big_grids();
 
     std::cout << "Fail count: " << fail_count << std::endl;
 

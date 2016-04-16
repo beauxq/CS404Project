@@ -214,92 +214,54 @@ void Grid::dp_find_min_paths()
     if (values.size() < 4)
         return;  // there are not 2 paths
 
-    std::vector<DP_info> dp_infos;
-    // TODO: separate dp_infos into separate vectors
-    // we only need 1 row of costs (maybe 2)
+    DP_info dp_info(column_count);
 
     // node 1, 1  top left
-    dp_infos.push_back(DP_info(values[0]));  // the minimum cost to get to 1, 1 is the cost of 1, 1
-    dp_infos[0].path.min1_came_from_min = 0;  // beginning of path  // TODO: don't think I need this (tell me that it didn't come from second shortest?)
+    dp_info.min0_costs[0] = values[0];  // the minimum cost to get to 1, 1 is the cost of 1, 1
 
-    // every node, left to right, top to bottom
-    for (size_t current_node = 1; current_node < values.size(); ++current_node)
+    // rest of top row
+    for (size_t current_node = 1; current_node < column_count; ++current_node)
     {
-        // top row
-        if (current_node < column_count)
+        dp_info.min0_costs[current_node] = dp_info.min0_costs[current_node - 1] + values[current_node];
+
+        dp_info.min0_paths[current_node] = dp_info.min0_paths[current_node - 1];
+        dp_info.min0_paths[current_node].push_back(1);  // right
+    }
+
+    size_t complete_grid_index = column_count;
+
+    // each row (after the top row)
+    for (dp_info.current_row = 1; dp_info.current_row < row_count; ++dp_info.current_row)
+    {
+        std::cout << dp_info.current_row << std::endl;
+        for (size_t current_node = 0; current_node < column_count; ++current_node)
         {
-            dp_infos.push_back(DP_info(values[current_node] + dp_infos[current_node - 1].min0_cost));
+            if (! (current_node))  // left column
+            {
+                dp_info.min0_costs[current_node] += values[complete_grid_index];
 
-            dp_infos[current_node].path.min0_came_from = 1;  // came from left
-            dp_infos[current_node].path.min1_came_from_min = 0;  // there is no 2nd shortest path to anything on the top row
+                dp_info.min0_paths[current_node].push_back(0);  // down
+            }
+            else  // neither top row, nor left column
+            {
+                two_mins_of_four(current_node, complete_grid_index, dp_info);
+            }
 
-            dp_infos[current_node].in_up_indicating_pattern = false;  // pattern can't exist on top row
-        }
-        // left column
-        else if (! (current_node % column_count))
-        {
-            dp_infos.push_back(DP_info(values[current_node] + dp_infos[current_node - column_count].min0_cost));
-
-            dp_infos[current_node].path.min0_came_from = 0;  // came from above
-            dp_infos[current_node].path.min1_came_from_min = 0;  // there is no 2nd shortest path to anything in left column
-
-            dp_infos[current_node].in_up_indicating_pattern = false;  // pattern can't exist on left column
-        }
-        else  // neither top row, nor left column
-        {
-            dp_infos.push_back(DP_info());
-
-            two_mins_of_four(current_node, dp_infos);
+            ++complete_grid_index;
         }
     }
     // done finding paths
 
-    // build paths (in reverse)
-    std::vector<bool> first_in_reverse, second_in_reverse;
-    size_t first_index = values.size() - 1;
-    size_t second_index = first_index;
-    bool second_path_for_second = true;  // whether we want the shortest path
-                                         // to where we currently are in the second shortest path,
-                                         // or the second shortest
-    for (size_t i = row_count + column_count - 2; i > 0; --i)
-    {
-        // shortest path
-        first_in_reverse.push_back(dp_infos[first_index].path.min0_came_from);
-        if (dp_infos[first_index].path.min0_came_from)  // if came from left
-            --first_index;
-        else  // came from above
-            first_index -= column_count;
-
-        // second shortest path
-        if (second_path_for_second)
-        {
-            second_in_reverse.push_back(dp_infos[second_index].path.min1_came_from);
-            if (dp_infos[second_index].path.min1_came_from_min == 0)  // check to see if we need to switch to the shortest path
-                second_path_for_second = false;
-            if (dp_infos[second_index].path.min1_came_from)  // if came from left
-                --second_index;
-            else  // came from above
-                second_index -= column_count;
-        }
-        else  // second shortest path is shortest path from here to beginning
-        {
-            second_in_reverse.push_back(dp_infos[second_index].path.min0_came_from);
-            if (dp_infos[second_index].path.min0_came_from)  // if came from left
-                --second_index;
-            else  // came from above
-                second_index -= column_count;
-        }
-    }
-
-    // reverse orders
+    // store paths
     clear_found_paths();
-    for (int i = first_in_reverse.size() - 1; i >= 0; --i)
-    {
-        shortest_if_found.push_back(first_in_reverse[i]);
-        second_shortest_if_found.push_back(second_in_reverse[i]);
-    }
-    cost_of_shortest_if_found = dp_infos[values.size() - 1].min0_cost;
-    cost_of_second_shortest_if_found = dp_infos[values.size() - 1].min1_cost;
+
+    size_t last = column_count - 1;
+
+    shortest_if_found = dp_info.min0_paths[last];
+    second_shortest_if_found = dp_info.min1_paths[last];
+
+    cost_of_shortest_if_found = dp_info.min0_costs[last];
+    cost_of_second_shortest_if_found = dp_info.min1_costs[last];
 }
 
 void Grid::dspa_find_min_paths()
@@ -396,47 +358,47 @@ bool Grid::read_error()
     return false;
 }
 
-void Grid::two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp_infos)
+void Grid::two_mins_of_four(const size_t& current_node,
+                            const size_t& complete_grid_index,
+                            DP_info& dp_info)
 {
     /** primary per-node comparison and choosing of dynamic programming algorithm */
 
-    size_t above = current_node - column_count;
     size_t left = current_node - 1;
 
-    if (dp_infos[above].min0_cost < dp_infos[left].min0_cost)
+    if (dp_info.min0_costs[current_node] < dp_info.min0_costs[left])
     {
         // min0 comes from min0 above
-        dp_infos[current_node].min0_cost = dp_infos[above].min0_cost + values[current_node];
-        dp_infos[current_node].path.min0_came_from = 0;  // above
+        dp_info.min0_costs[current_node] += values[complete_grid_index];
+        dp_info.min0_paths[current_node].push_back(0);  // down
 
-        if (dp_infos[above].min1_cost < dp_infos[left].min0_cost)
+        if (dp_info.min1_costs[current_node] < dp_info.min0_costs[left])
         {
             // min1 comes from min1 above
-            set_min1(1, 0, above, dp_infos, current_node);
+            dp_info.min1_costs[current_node] += values[complete_grid_index];
+            dp_info.min1_paths[current_node].push_back(0);  // down
         }
-        else if (dp_infos[above].min1_cost > dp_infos[left].min0_cost)
+        else if (dp_info.min1_costs[current_node] > dp_info.min0_costs[left])
         {
             // min1 comes from min0 left
-            set_min1(0, 1, left, dp_infos, current_node);
+            dp_info.min1_costs[current_node] = dp_info.min0_costs[left] + values[complete_grid_index];
+            dp_info.min1_paths[current_node] = dp_info.min0_paths[left];
+            dp_info.min1_paths[current_node].push_back(1);  // right
         }
-        else  // ==, and min0 comes from above
+        else  // costs ==, and min0 comes from above
         {
-            if (dp_infos[above].in_up_indicating_pattern)
+            if (dp_info.min1_paths[current_node] < dp_info.min0_paths[left])
             {
                 // min1 comes from min1 above
-                set_min1(1, 0, above, dp_infos, current_node);
+                dp_info.min1_costs[current_node] += values[complete_grid_index];
+                dp_info.min1_paths[current_node].push_back(0);  // down
             }
-            // check whether this step would make the up indicating pattern
-            else if (dp_infos[above].path.min1_came_from_min && dp_infos[above].path.min1_came_from)
-            {
-                // came from second shortest and came from left
-                // min1 comes from min1 above
-                set_min1(1, 0, above, dp_infos, current_node);
-            }
-            else  // no up indicating pattern, default to left
+            else  // min1 above path > min0 left path
             {
                 // min1 comes from min0 left
-                set_min1(0, 1, left, dp_infos, current_node);
+                dp_info.min1_costs[current_node] = dp_info.min1_costs[left] + values[complete_grid_index];
+                dp_info.min1_paths[current_node] = dp_info.min0_paths[left];
+                dp_info.min1_paths[current_node].push_back(1);  // right
             }
         }
     }
@@ -444,84 +406,41 @@ void Grid::two_mins_of_four(const size_t& current_node, std::vector<DP_info>& dp
     // in more significant digit when path is interpreted as a number
     else  // above min0 >= left min0
     {
-        // min0 comes from min0 left
-        dp_infos[current_node].min0_cost = dp_infos[left].min0_cost + values[current_node];
-        dp_infos[current_node].path.min0_came_from = 1;  // left
-
-        if (dp_infos[above].min0_cost < dp_infos[left].min1_cost)
+        // handle second shortest path first because handling shortest first would overwrite data we need (from row above)
+        if (dp_info.min0_costs[current_node] < dp_info.min1_costs[left])
         {
             // min1 comes from min0 above
-            set_min1(0, 0, above, dp_infos, current_node);
+            dp_info.min1_costs[current_node] = dp_info.min0_costs[current_node] + values[complete_grid_index];
+            dp_info.min1_paths[current_node] = dp_info.min0_paths[current_node];
+            dp_info.min1_paths[current_node].push_back(0);  // down
         }
-        else if (dp_infos[above].min0_cost > dp_infos[left].min1_cost)
+        else if (dp_info.min0_costs[current_node] > dp_info.min1_costs[left])
         {
             // min1 comes from min1 left
-            set_min1(1, 1, left, dp_infos, current_node);
+            dp_info.min1_costs[current_node] = dp_info.min1_costs[left] + values[complete_grid_index];
+            dp_info.min1_paths[current_node] = dp_info.min1_paths[left];
+            dp_info.min1_paths[current_node].push_back(1);  // right
         }
-        else  // ==, and min0 comes from left
+        else  // costs ==, and min0 comes from left
         {
-            if (dp_infos[left].in_up_indicating_pattern)
+            if (dp_info.min0_paths[current_node] < dp_info.min1_paths[left])
             {
                 // min1 comes from min0 above
-                set_min1(0, 0, above, dp_infos, current_node);
+                dp_info.min1_costs[current_node] = dp_info.min0_costs[current_node] + values[complete_grid_index];
+                dp_info.min1_paths[current_node] = dp_info.min0_paths[current_node];
+                dp_info.min1_paths[current_node].push_back(0);  // down
             }
-            // check whether this step would make the up indicating pattern
-            else if (dp_infos[left].path.min1_came_from_min && dp_infos[left].path.min1_came_from == 0)
-            {
-                // came from second shortest and came from above
-                // min1 comes from min0 above
-                set_min1(0, 0, above, dp_infos, current_node);
-            }
-            else  // no up indicating pattern, default to left
+            else  // min0 above path > min1 left path
             {
                 // min1 comes from min1 left
-                set_min1(1, 1, left, dp_infos, current_node);
+            dp_info.min1_costs[current_node] = dp_info.min1_costs[left] + values[complete_grid_index];
+            dp_info.min1_paths[current_node] = dp_info.min1_paths[left];
+            dp_info.min1_paths[current_node].push_back(1);  // right
             }
         }
-    }
-}
-
-void Grid::set_min1(const bool& comes_from_min,
-              const bool& comes_from,
-              const size_t& index_of_from,
-              std::vector<DP_info>& dp_infos,
-              const size_t& current_node)
-{
-    /** set information about the second shortest path
-        information about shortest path should be set before this is called
-        (dp_infos[current_node].path.min1_came_from)
-        comes_from_min: 0 if this second shortest path comes
-                        from the shortest path to the node that it came from
-                        1 if it comes from the second shortest
-        comes_from:     the direction that this second shortest path came from
-                        0 came from above
-                        1 came from left
-        index:          index of the node that it came from */
-
-    if (comes_from_min)  // comes from second shortest
-        dp_infos[current_node].min1_cost = dp_infos[index_of_from].min1_cost + values[current_node];
-    else  // comes from shortest
-        dp_infos[current_node].min1_cost = dp_infos[index_of_from].min0_cost + values[current_node];
-
-    dp_infos[current_node].path.min1_came_from_min = comes_from_min;  // shortest or second shortest
-    dp_infos[current_node].path.min1_came_from = comes_from;  // direction
-
-    // set in_up_indicating_pattern
-    if (comes_from_min)  // this second shortest comes from second shortest
-    {
-        if ((dp_infos[index_of_from].in_up_indicating_pattern) ||  // the node it comes from is already in an up indicating pattern or
-            (dp_infos[index_of_from].path.min1_came_from_min &&  // a new pattern because the previous node's min1 also came from a min1
-             (comes_from != dp_infos[index_of_from].path.min1_came_from)))  // in a different direction than this one
-        {
-            dp_infos[current_node].in_up_indicating_pattern = true;
-        }
-        else
-        {
-            dp_infos[current_node].in_up_indicating_pattern = false;
-        }
-    }
-    else
-    {
-        dp_infos[current_node].in_up_indicating_pattern = false;
+        // min0 comes from min0 left
+        dp_info.min0_costs[current_node] = dp_info.min0_costs[left] + values[complete_grid_index];
+        dp_info.min0_paths[current_node] = dp_info.min0_paths[left];
+        dp_info.min0_paths[current_node].push_back(1);  // right
     }
 }

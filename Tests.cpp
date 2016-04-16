@@ -212,7 +212,7 @@ int Tests::test_path_algorithms()
                                        "151  162  168  177  191  175  179  117  146  171  141  191  141-",
                                        "1 1 0 1 0 1 0 1 0 1 0 1 0 1 1 1 1 0 1 0",
                                        "0 0 1 0 1 0 1 1 1 1 0 1 0 1 1 1 1 0 1 0");
-/*
+
     fail_count += test_both_algorithms("resources/CS404SP16RewardMatrixInput10.txt",
                                        "49 51\n"
 "10-  1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1 \n"
@@ -424,7 +424,7 @@ int Tests::test_path_algorithms()
 " 1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1  21   1   1-  1-  1-",
                                        "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1 1",
                                        "0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1 1");
-*/
+
     fail_count += test_both_algorithms("resources/myInput1.txt",
                                        "5 5\n"
                                        "  2-   1-   2   99   99 \n"
@@ -590,11 +590,11 @@ int Tests::test_path_algorithms()
 
 int Tests::test_big_grids()
 {
-    Grid grid(10000, 10000);
+    Grid grid(100, 100);
 
-    //std::cout << "starting dp for 10000x10000\n";
-    //grid.dp_find_min_paths();
-    //std::cout << "finished dp for 10000x10000\n";
+    std::cout << "starting dp for 10000x10000\n";
+    grid.dp_find_min_paths();
+    std::cout << "finished dp for 10000x10000\n";
 
     grid.clear_found_paths();
 
