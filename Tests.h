@@ -21,6 +21,12 @@ namespace Tests
                              const std::string& expected_second_shortest,
                              const std::string& expected_shortest_binary,
                              const std::string& expected_second_shortest_binary);
+    int compare_two_algorithms(const std::string& filename);
+
+    int compare_two_algorithms();
+
+    void time_dspa();
+    void time_dp();
 }
 
 #endif // TESTS_H_INCLUDED

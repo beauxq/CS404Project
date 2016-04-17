@@ -29,6 +29,11 @@ struct DSPA_path
         }
         return false;
     }
+
+    bool path_less_alt(const DSPA_path& rhs) const
+    {
+        return path < rhs.path;
+    }
 };
 
 struct comparator

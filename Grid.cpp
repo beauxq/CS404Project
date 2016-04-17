@@ -9,6 +9,7 @@
 #include <climits>
 
 #include "DSPA_path.h"
+#include "DP_info.h"
 
 const unsigned int Grid::DEFAULT_VALUE = 1;  // default cost of each node
 
@@ -233,7 +234,10 @@ void Grid::dp_find_min_paths()
     // each row (after the top row)
     for (dp_info.current_row = 1; dp_info.current_row < row_count; ++dp_info.current_row)
     {
-        std::cout << dp_info.current_row << std::endl;
+        // progress indicator
+        if (! (dp_info.current_row % 200))
+            std::cout << "row: " << dp_info.current_row << std::endl;
+
         for (size_t current_node = 0; current_node < column_count; ++current_node)
         {
             if (! (current_node))  // left column
@@ -279,16 +283,25 @@ void Grid::dspa_find_min_paths()
     std::priority_queue<DSPA_path, std::vector<DSPA_path>, comparator> path_min_heap;  // all of the paths we find
     DSPA_path working_path, new_path;
 
+    // the first path is the first node alone
     new_path.cost = values[0];
     new_path.end_node = 0;
     path_min_heap.push(new_path);
+
+    // for progress indicator
+    unsigned long long int size_shown = 0;
 
     while ((!path_min_heap.empty()) && path_counts[LAST_NODE] < TARGET_PATH_COUNT)
     {
         working_path = path_min_heap.top();
         path_min_heap.pop();
 
-        // std::cout << "took path from heap: " << path_str(working_path.path) << "\nwith cost: " << working_path.cost << std::endl;
+        // progress indicator
+        if ((! (working_path.cost % 400)) && working_path.cost > size_shown)
+        {
+            std::cout << "took path from heap with cost: " << working_path.cost << std::endl;
+            size_shown = working_path.cost;
+        }
 
         ++path_counts[working_path.end_node];
 
@@ -317,6 +330,7 @@ void Grid::dspa_find_min_paths()
 
                 path_min_heap.push(new_path);
             }
+
         }
     }
 
@@ -387,7 +401,7 @@ void Grid::two_mins_of_four(const size_t& current_node,
         }
         else  // costs ==, and min0 comes from above
         {
-            if (dp_info.min1_paths[current_node] < dp_info.min0_paths[left])
+            if (path_less(dp_info.min1_paths[current_node], dp_info.min0_paths[left]))
             {
                 // min1 comes from min1 above
                 dp_info.min1_costs[current_node] += values[complete_grid_index];
@@ -423,7 +437,7 @@ void Grid::two_mins_of_four(const size_t& current_node,
         }
         else  // costs ==, and min0 comes from left
         {
-            if (dp_info.min0_paths[current_node] < dp_info.min1_paths[left])
+            if (path_less(dp_info.min0_paths[current_node], dp_info.min1_paths[left]))
             {
                 // min1 comes from min0 above
                 dp_info.min1_costs[current_node] = dp_info.min0_costs[current_node] + values[complete_grid_index];
@@ -433,9 +447,9 @@ void Grid::two_mins_of_four(const size_t& current_node,
             else  // min0 above path > min1 left path
             {
                 // min1 comes from min1 left
-            dp_info.min1_costs[current_node] = dp_info.min1_costs[left] + values[complete_grid_index];
-            dp_info.min1_paths[current_node] = dp_info.min1_paths[left];
-            dp_info.min1_paths[current_node].push_back(1);  // right
+                dp_info.min1_costs[current_node] = dp_info.min1_costs[left] + values[complete_grid_index];
+                dp_info.min1_paths[current_node] = dp_info.min1_paths[left];
+                dp_info.min1_paths[current_node].push_back(1);  // right
             }
         }
         // min0 comes from min0 left

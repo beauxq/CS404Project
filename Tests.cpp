@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <climits>
+#include <ctime>
 
 #include "Grid.h"
 
@@ -584,25 +585,39 @@ int Tests::test_path_algorithms()
                                        "  7   11    4    2    5-",
                                        "1 1 0 1 0 0 1 0",
                                        "1 0 1 1 0 0 1 0");
-
+/*
+    fail_count += test_both_algorithms("resources/CS404SP16RewardMatrixInput12.txt",
+                                       "a",
+                                       "b",
+                                       "c",
+                                       "d");
+*/
     return fail_count;
 }
 
 int Tests::test_big_grids()
 {
-    Grid grid(100, 100);
+    int fail_count = 0;
 
-    std::cout << "starting dp for 10000x10000\n";
+    fail_count += ! compare_two_algorithms("resources/CS404SP16RewardMatrixInput16.txt");
+    fail_count += ! compare_two_algorithms("resources/CS404SP16RewardMatrixInput17.txt");
+    fail_count += ! compare_two_algorithms("resources/CS404SP16RewardMatrixInput18.txt");
+    fail_count += ! compare_two_algorithms("resources/CS404SP16RewardMatrixInput19.txt");
+    fail_count += ! compare_two_algorithms("resources/CS404SP16RewardMatrixInput20.txt");
+
+    Grid grid(9999, 9999);
+
+    std::cout << "starting dp for 9999x9999\n";
     grid.dp_find_min_paths();
-    std::cout << "finished dp for 10000x10000\n";
+    std::cout << "finished dp for 9999x9999\n";
 
     grid.clear_found_paths();
 
-    std::cout << "starting dspa for 10000x10000\n";
+    std::cout << "starting dspa for 9999x9999\n";
     grid.dspa_find_min_paths();
-    std::cout << "finished dspa for 10000x10000\n";
+    std::cout << "finished dspa for 9999x9999\n";
 
-    return 0;
+    return fail_count;
 }
 
 int Tests::test_both_algorithms(const std::string& filename,
@@ -630,9 +645,6 @@ int Tests::test_both_algorithms(const std::string& filename,
                                expected_second_shortest_binary,
                                test_name_prefix + " dp second shortest binary");
 
-    //std::cout << grid.visual_str(grid.get_second_shortest_if_found()) << std::endl;
-    //std::cout << grid.path_str(grid.get_second_shortest_if_found()) << std::endl;
-
     grid.clear_found_paths();
     grid.dspa_find_min_paths();
 
@@ -650,4 +662,87 @@ int Tests::test_both_algorithms(const std::string& filename,
                                test_name_prefix + " dspa second shortest binary");
 
     return fail_count;
+}
+
+int Tests::compare_two_algorithms(const std::string& filename)
+{
+    int fail_count = 0;
+    std::string test_name_prefix = filename.substr(10, filename.find_last_of('.') - 10);
+
+    Grid grid(filename);
+    grid.dp_find_min_paths();
+
+    std::string dp_shortest = grid.visual_str(grid.get_shortest_if_found());
+    std::string dp_second_shortest = grid.visual_str(grid.get_second_shortest_if_found());
+    std::string dp_shortest_binary = grid.path_str(grid.get_shortest_if_found());
+    std::string dp_second_shortest_binary = grid.path_str(grid.get_second_shortest_if_found());
+    unsigned long long int dp_shortest_cost = grid.get_cost_of_shortest_if_found();
+    unsigned long long int dp_second_shortest_cost = grid.get_cost_of_second_shortest_if_found();
+
+    grid.clear_found_paths();
+
+    grid.dspa_find_min_paths();
+
+    fail_count += ! test_equal(grid.visual_str(grid.get_shortest_if_found()),
+                               dp_shortest,
+                               test_name_prefix + " match shortest");
+    fail_count += ! test_equal(grid.visual_str(grid.get_second_shortest_if_found()),
+                               dp_second_shortest,
+                               test_name_prefix + " match second shortest");
+    fail_count += ! test_equal(grid.path_str(grid.get_shortest_if_found()),
+                               dp_shortest_binary,
+                               test_name_prefix + " match shortest binary");
+    fail_count += ! test_equal(grid.path_str(grid.get_second_shortest_if_found()),
+                               dp_second_shortest_binary,
+                               test_name_prefix + " match second shortest binary");
+    fail_count += ! test_equal(grid.get_cost_of_shortest_if_found(),
+                               dp_shortest_cost,
+                               test_name_prefix + " match shortest cost");
+    fail_count += ! test_equal(grid.get_cost_of_second_shortest_if_found(),
+                               dp_second_shortest_cost,
+                               test_name_prefix + " match second shortest cost");
+
+    return fail_count;
+}
+
+int Tests::compare_two_algorithms()
+{
+    int fail_count = 0;
+
+    fail_count += compare_two_algorithms("resources/CS404SP16RewardMatrixInput12.txt");
+    fail_count += compare_two_algorithms("resources/CS404SP16RewardMatrixInput13.txt");
+    fail_count += compare_two_algorithms("resources/CS404SP16RewardMatrixInput14.txt");
+    fail_count += compare_two_algorithms("resources/CS404SP16RewardMatrixInput15.txt");
+
+    fail_count += compare_two_algorithms("resources/CS404SP16RewardMatrixInput21.txt");
+
+    return fail_count;
+}
+
+void Tests::time_dspa()
+{
+    Grid grid15("resources/CS404SP16RewardMatrixInput15.txt");
+    Grid grid16("resources/CS404SP16RewardMatrixInput16.txt");
+    Grid grid17("resources/CS404SP16RewardMatrixInput17.txt");
+    clock_t start = clock();
+    grid15.dspa_find_min_paths();
+    grid16.dspa_find_min_paths();
+    grid17.dspa_find_min_paths();
+    clock_t end = clock();
+
+    std::cout << "dspa time: " << end - start << std::endl;
+}
+
+void Tests::time_dp()
+{
+    Grid grid15("resources/CS404SP16RewardMatrixInput15.txt");
+    Grid grid16("resources/CS404SP16RewardMatrixInput16.txt");
+    Grid grid17("resources/CS404SP16RewardMatrixInput17.txt");
+    clock_t start = clock();
+    grid15.dp_find_min_paths();
+    grid16.dp_find_min_paths();
+    grid17.dp_find_min_paths();
+    clock_t end = clock();
+
+    std::cout << "dp time: " << end - start << std::endl;
 }

@@ -1,10 +1,13 @@
 #ifndef DP_INFO_H_INCLUDED
 #define DP_INFO_H_INCLUDED
 
-/** information on paths for dynamic programming */
+/** information on paths for dynamic programming
+    and a path comparison function
+    (built in c++ operator< is slower) */
 
 #include <climits>
 #include <vector>
+#include <cstddef>
 
 struct DP_info
 {
@@ -28,5 +31,8 @@ struct DP_info
                                           min0_paths(column_count),
                                           min1_paths(column_count) {}
 };
+
+bool path_less(const std::vector<bool>& lhs, const std::vector<bool>& rhs);
+    /** c++ built in operator< for vectors is slower */
 
 #endif // DP_INFO_H_INCLUDED
