@@ -27,6 +27,11 @@ namespace Tests
 
     void time_dspa();
     void time_dp();
+
+    void output_paths_for_given_input();
+
+    void view_specific();
+    /** all the path information about a specific grid from a file */
 }
 
 #endif // TESTS_H_INCLUDED

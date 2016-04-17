@@ -24,7 +24,7 @@ void time_tests()
 
 int main()
 {
-    time_tests();
+    Tests::view_specific();
 
     return 0;
 }

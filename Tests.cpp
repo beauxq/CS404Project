@@ -6,6 +6,7 @@
 #include <sstream>
 #include <climits>
 #include <ctime>
+#include <vector>
 
 #include "Grid.h"
 
@@ -745,4 +746,108 @@ void Tests::time_dp()
     clock_t end = clock();
 
     std::cout << "dp time: " << end - start << std::endl;
+}
+
+void Tests::output_paths_for_given_input()
+{
+    /** (using dp) */
+
+    std::vector<std::string> numbers = {"1", "2", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21"};
+
+    std::ofstream fout("output.txt");
+
+    Grid grid;
+
+    for (auto number = numbers.begin(); number != numbers.end(); ++number)
+    {
+        grid.read_from_file("resources/CS404SP16RewardMatrixInput" + *number + ".txt");
+        grid.dp_find_min_paths();
+        fout << *number << std::endl;
+        std::cout << *number << std::endl;
+        fout << grid.path_str(grid.get_shortest_if_found()) << std::endl;
+        fout << grid.path_str(grid.get_second_shortest_if_found()) << std::endl;
+    }
+
+    fout.close();
+}
+
+void Tests::view_specific()
+{
+    /** all the path information about a specific grid from a file */
+
+    Grid grid;
+    std::string filename;
+    std::string input;
+    char choice;
+
+    while (true)
+    {
+        std::cout << "\n(m)y input\n(g)iven input\n(q)uit\n? ";
+        std::getline(std::cin, input);
+        choice = input[0];  // this is safe / gives null for empty string
+
+        switch (choice)
+        {
+        case 'm':
+        case 'M':
+            std::cout << "number? ";
+            std::getline(std::cin, input);
+            filename = "resources/myInput" + input + ".txt";
+            break;
+        case 'g':
+        case 'G':
+            std::cout << "number? ";
+            std::getline(std::cin, input);
+            filename = "resources/CS404SP16RewardMatrixInput" + input + ".txt";
+            break;
+        case 'q':
+        case 'Q':
+            return;
+        default:
+            continue;
+        }
+
+        if (! grid.read_from_file(filename))
+            continue;
+
+        std::cout << "d(p)\nd(s)pa\nwhich algorithm? ";
+        std::getline(std::cin, input);
+        choice = input[0];
+
+        clock_t start;
+        clock_t end;
+
+        switch (choice)
+        {
+        case 'p':
+        case 'P':
+            start = clock();
+            grid.dp_find_min_paths();
+            end = clock();
+            break;
+        case 's':
+        case 'S':
+            start = clock();
+            grid.dspa_find_min_paths();
+            end = clock();
+            break;
+        default:
+            continue;
+        }
+
+        // display everything
+        std::cout << "\nshortest path:\n";
+        if (grid.get_column_count() < 21)
+            std::cout << grid.visual_str(grid.get_shortest_if_found()) << std::endl;
+        else  // if big, just display row count and column count
+            std::cout << grid.get_row_count() << ' ' << grid.get_column_count() << std::endl;
+        std::cout << grid.path_str(grid.get_shortest_if_found()) << std::endl;
+        std::cout << "cost: " << grid.get_cost_of_shortest_if_found() << std::endl;
+        std::cout << "second shortest path:\n";
+        if (grid.get_column_count() < 21)
+            std::cout << grid.visual_str(grid.get_second_shortest_if_found()) << std::endl;
+        std::cout << grid.path_str(grid.get_second_shortest_if_found()) << std::endl;
+        std::cout << "cost: " << grid.get_cost_of_second_shortest_if_found() << std::endl;
+        std::cout << "time: " << end - start << std::endl;
+    }
 }

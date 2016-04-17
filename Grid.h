@@ -50,8 +50,10 @@ public:
     const std::vector<bool>& get_second_shortest_if_found() const { return second_shortest_if_found; }
     const unsigned long long int& get_cost_of_shortest_if_found() const { return cost_of_shortest_if_found; }
     const unsigned long long int& get_cost_of_second_shortest_if_found() const { return cost_of_second_shortest_if_found; }
+    const size_t& get_row_count() const { return row_count; }
+    const size_t& get_column_count() const { return column_count; }
 
-    static const unsigned int DEFAULT_VALUE;
+    static const unsigned int DEFAULT_VALUE;  // 1
 
 protected:
 

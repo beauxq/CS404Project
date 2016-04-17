@@ -1,0 +1,15 @@
+size (squared)
+calculated complexity
+time to complete dp
+
+2000
+16 bil
+11.896
+
+4000
+128 bil
+95.151
+
+8000
+1024 bil
+777.917
