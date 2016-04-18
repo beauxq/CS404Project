@@ -5,7 +5,10 @@
 
 struct DSPA_path
 {
-    std::vector<bool> path;  // TODO: change this to not have to save so much?
+    /** a path that can be inserted into a heap
+        for the modified Dijkstra's algorithm */
+
+    std::vector<bool> path;
     unsigned long long int cost;
     size_t end_node;
 
@@ -32,6 +35,8 @@ struct DSPA_path
 
     bool path_less_alt(const DSPA_path& rhs) const
     {
+        // this was found to be slower than path_less
+
         return path < rhs.path;
     }
 };
@@ -39,6 +44,7 @@ struct DSPA_path
 struct comparator
 {
     /** for min heap */
+
     bool operator()(const DSPA_path& i, const DSPA_path& j)
     {
         return j < i;

@@ -11,7 +11,7 @@
 
 struct DP_info
 {
-    /** infomation needed to find the paths */
+    /** information needed to find the paths using the dynamic programing algorithm */
 
     std::vector<unsigned long long int> min0_costs;
     // costs of shortest path to each node
@@ -21,8 +21,8 @@ struct DP_info
 
     size_t current_row;
 
-    std::vector<std::vector<bool> > min0_paths;
-    std::vector<std::vector<bool> > min1_paths;
+    std::vector<std::vector<bool> > min0_paths;  // shortest paths
+    std::vector<std::vector<bool> > min1_paths;  // second shortest paths
 
     DP_info() : current_row(0) {}
     DP_info(const size_t& column_count) : min0_costs(column_count),

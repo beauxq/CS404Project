@@ -16,9 +16,6 @@ public:
              cost_of_second_shortest_if_found(ULLONG_MAX) {};
     Grid(const std::string& filename);
     Grid(const size_t& _row_count, const size_t& _column_count);
-    /* TODO: get rid of copy constructor and assignment operator?
-    Grid(const Grid& other);
-    Grid& operator= (const Grid& other); */
 
     bool read_from_file(const std::string& filename);
     /** @returns success */

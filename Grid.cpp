@@ -4,7 +4,6 @@
 #include <string>
 #include <fstream>
 #include <vector>
-#include <utility>  // pair  // TODO: is this still used?
 #include <queue>  // priority queue
 #include <climits>
 
@@ -22,21 +21,6 @@ Grid::Grid(const size_t& _row_count, const size_t& _column_count)
 {
     init(_row_count, _column_count);
 }
-
-/*
-TODO: get rid of this if I don't need it
-Grid::Grid(const Grid& other)
-{
-    // TODO: copy ctor
-}
-
-Grid& Grid::operator= (const Grid& rhs)
-{
-    if (this == &rhs) return *this; // handle self assignment
-    // TODO: assignment operator
-    return *this;
-}
-*/
 
 bool Grid::read_from_file(const std::string& filename)
 {
