@@ -91,7 +91,7 @@ std::string Grid::visual_str(const std::vector<bool>& path /* = empty */)
         path to display found path */
 
     size_t next_index_on_path = path.empty() ? values.size() : 0;  // no path is drawn if the path is empty
-    auto path_itr = path.begin();
+    size_t path_itr_index = 0;
 
     std::string to_return = std::to_string(row_count) + ' ' + std::to_string(column_count);
 
@@ -130,8 +130,8 @@ std::string Grid::visual_str(const std::vector<bool>& path /* = empty */)
             if (value_index == next_index_on_path)
             {
                 to_return += '-';
-                next_index_on_path += *path_itr ? 1 : column_count;  // find next node on path
-                ++path_itr;
+                next_index_on_path += path[path_itr_index] ? 1 : column_count;  // find next node on path
+                ++path_itr_index;
             }
             else  // not on path
             {
