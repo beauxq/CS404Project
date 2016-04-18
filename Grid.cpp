@@ -7,6 +7,11 @@
 #include <queue>  // priority queue
 #include <climits>
 
+// Microsoft can't follow standards
+#ifdef _MSC_VER
+#include "stdint.h"
+#endif // _MSC_VER
+
 #include "DSPA_path.h"
 #include "DP_info.h"
 
