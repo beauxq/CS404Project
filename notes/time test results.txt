@@ -4,12 +4,15 @@ time to complete dp
 
 2000
 16 bil
-11.896
+comp d 11.896
+comp l 28.696
 
 4000
 128 bil
-95.151
+comp d 95.151
+comp l 235.074
 
 8000
 1024 bil
-777.917
+comp d 777.917
+comp l 1863.63
