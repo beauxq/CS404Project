@@ -10,7 +10,7 @@ void pass_fail_tests()
 
     fail_count += Tests::compare_two_algorithms();
 
-    fail_count += Tests::test_big_grids();
+    // fail_count += Tests::test_big_grids();  // too big for DSPA
 
     std::cout << "Fail count: " << fail_count << std::endl;
 }
