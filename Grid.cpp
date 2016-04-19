@@ -130,8 +130,11 @@ std::string Grid::visual_str(const std::vector<bool>& path /* = empty */)
             if (value_index == next_index_on_path)
             {
                 to_return += '-';
-                next_index_on_path += path[path_itr_index] ? 1 : column_count;  // find next node on path
-                ++path_itr_index;
+                if (path_itr_index < path.size())
+                {
+                    next_index_on_path += path[path_itr_index] ? 1 : column_count;  // find next node on path
+                    ++path_itr_index;
+                }
             }
             else  // not on path
             {
